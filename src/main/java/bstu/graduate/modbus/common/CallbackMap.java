@@ -12,11 +12,9 @@ public class CallbackMap {
     private static final Map<String, Callback> CALLBACK_MAP = new HashMap<>();
 
     public CallbackMap(List<Callback> callbacks) {
-        for (Callback callback : callbacks) {
-            if (callback != null) {
-                CALLBACK_MAP.put(callback.getActionCallback().toString(), callback);
-            }
-        }
+        callbacks.stream()
+                .filter(callback -> callback.getActionCallback() != null)
+                .forEach(callback -> CALLBACK_MAP.put(callback.getActionCallback().toString(), callback));
     }
 
     public Callback getCallback(String keyCallback) {
