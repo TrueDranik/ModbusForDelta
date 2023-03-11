@@ -17,6 +17,7 @@ public enum CallbackEnum {
 
     // Курсовая
     COURSEWORK_MENU,
+    START_COURSEWORK,
 
     // Дипломная
     GRADUATEWORK_MENU,
