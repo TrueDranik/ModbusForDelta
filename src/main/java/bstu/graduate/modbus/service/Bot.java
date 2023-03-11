@@ -36,48 +36,76 @@ public class Bot extends TelegramLongPollingBot {
         boolean hasMessage = update.hasMessage();
         if (hasCallbackQuery) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
-            String callbackQueryData = callbackQuery.getData();
-
-            log.info("[CALLBACK]: {}", callbackQueryData);
-
-            String[] splitCallbackQueryData = callbackQueryData.split("/");
-            Callback callback = callbackMap.getCallback(splitCallbackQueryData[0]);
-            List<BotApiMethod<?>> executeCallbackQuery = callback.getCallbackQuery(callbackQuery);
-
-            executeCallbackQuery.forEach(apiMethod -> {
-                try {
-                    execute(apiMethod);
-                    Thread.sleep(3000);
-                } catch (TelegramApiException | InterruptedException e) {
-                    log.error("callback: error with execute: " + e);
-                    Thread.currentThread().interrupt();
-                }
-            });
+            executeAllCallbackQueries(callbackQuery);
         } else if (hasMessage) {
             Message message = update.getMessage();
-            Long chatId = message.getChatId();
 
             boolean isCommand = message.isCommand();
             if (isCommand) {
-                log.info("[COMMAND]: {}", message.getText());
-
-                BaseCommand baseCommand = commands.stream()
-                        .filter(it -> message.getText().equals("/" + it.getBotCommand().getCommand()))
-                        .findFirst()
-                        .orElseThrow(() -> new IllegalArgumentException("No such command!"));
-
-                try {
-                    execute(baseCommand.getAction(chatId));
-                } catch (TelegramApiException e) {
-                    log.error("command: error with execute: " + e);
-                }
+                processCommand(message);
             } else {
-                try {
-                    execute(new SendMessage(String.valueOf(chatId), "Lox?"));
-                } catch (TelegramApiException e) {
-                    log.error("message: error with execute: " + e);
-                }
+                Long chatId = message.getChatId();
+                sendMessage(chatId);
             }
+        }
+    }
+
+    // TODO: 06.03.2023 написать ExceptionHandler чтобы отлавливать и логировать ошибки
+    private void executeAllCallbackQueries(CallbackQuery callbackQuery) {
+        String callbackQueryData = callbackQuery.getData();
+
+        log.info("[CALLBACK]: {}", callbackQueryData);
+
+        String[] splitCallbackQueryData = callbackQueryData.split("/");
+        Callback callback = callbackMap.getCallback(splitCallbackQueryData[0]);
+        List<BotApiMethod<?>> callbackQueries = callback.getCallbackQueries(callbackQuery);
+
+        callbackQueries.forEach(this::executeCallbackQueries);
+    }
+
+    private void processCommand(Message message) {
+        Long chatId = message.getChatId();
+        String messageText = message.getText();
+
+        log.info("[COMMAND]: {}", messageText);
+
+        BaseCommand baseCommand = getBaseCommand(message);
+
+        executeCommand(chatId, baseCommand);
+    }
+
+    private BaseCommand getBaseCommand(Message message) {
+        return commands.stream()
+                .filter(it -> message.getText().equals("/" + it.getBotCommand().getCommand()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No such command!"));
+    }
+
+    private void executeCommand(Long chatId, BaseCommand baseCommand) {
+        try {
+            BotApiMethod<?> commandAction = baseCommand.getAction(chatId);
+            execute(commandAction);
+        } catch (TelegramApiException e) {
+            log.error("[COMMAND]: error with execute: {}.", e.getMessage());
+        }
+    }
+
+    private void sendMessage(Long chatId) {
+        try {
+            SendMessage sendMessageMethod = new SendMessage(String.valueOf(chatId), "Неизвестное действие.");
+            execute(sendMessageMethod);
+        } catch (TelegramApiException e) {
+            log.error("[MESSAGE]: error with execute: {}.", e.getMessage());
+        }
+    }
+
+    private void executeCallbackQueries(BotApiMethod<?> apiMethod) {
+        try {
+            execute(apiMethod);
+            Thread.sleep(2000);
+        } catch (TelegramApiException | InterruptedException e) {
+            log.error("[CALLBACK]: error with execute: {}.", e.getMessage());
+            Thread.currentThread().interrupt();
         }
     }
 
