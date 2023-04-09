@@ -31,15 +31,15 @@ public class CallbackMainMenuImpl implements Callback {
     private EditMessageText generateMainMenu(Message message) {
         Integer messageId = message.getMessageId();
         Long chatId = message.getChatId();
-        String text = "Главное меню управления";
+        String text = "Меню управления 'ПЧ Дельта'";
 
         return MessageBuilder.editMessageText(messageId, chatId, text, mainMenuKeyboard());
     }
 
     private InlineKeyboardMarkup mainMenuKeyboard() {
         int countButtons = 2;
-        String[] textButtons = {"Управление реле", "Управление ПЧ 'Дельта'"};
-        CallbackEnum[] callbacks = {CallbackEnum.RELAY_CONTROL_MENU, CallbackEnum.DELTA_FC_CONTROL_MENU};
+        String[] textButtons = {"Команды управления", "Чтение статуса"};
+        CallbackEnum[] callbacks = {CallbackEnum.CONTROL_COMMAND, CallbackEnum.READING_STATUS_COMMAND};
 
         return GenerateInlineKeyboardMarkup.withoutRow(countButtons, textButtons, callbacks);
     }
