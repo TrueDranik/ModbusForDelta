@@ -11,12 +11,13 @@ import java.util.List;
 @Component
 public interface Callback {
     default List<BotApiMethod<?>> getCallbackQueries(CallbackQuery callbackQuery) {
+        String callbackQueryData = callbackQuery.getData();
         Message message = callbackQuery.getMessage();
 
-        return apiMethodProcessor(message);
+        return apiMethodProcessor(callbackQueryData, message);
     }
 
-    List<BotApiMethod<?>> apiMethodProcessor(Message message);
+    List<BotApiMethod<?>> apiMethodProcessor(String callbackQueryData, Message message);
 
     CallbackEnum getActionCallback();
 }
