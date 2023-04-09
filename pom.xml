@@ -11,10 +11,10 @@
     </parent>
 
     <groupId>bstu.graduate</groupId>
-    <artifactId>ModbusForDelta</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>ModbusForDelta</name>
-    <description>ModbusForDelta</description>
+    <artifactId>remote-delta-control</artifactId>
+    <version>1.0.1</version>
+    <name>remote-delta-control</name>
+    <description>Управление ПЧ Delta VFB-D через Telegram bot</description>
 
     <properties>
         <java.version>19</java.version>
