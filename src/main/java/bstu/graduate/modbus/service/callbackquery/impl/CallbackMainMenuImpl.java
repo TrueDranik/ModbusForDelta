@@ -15,10 +15,14 @@ import java.util.List;
 
 @Service
 public class CallbackMainMenuImpl implements Callback {
+
     @Override
-    public List<BotApiMethod<?>> apiMethodProcessor(Message message) {
+    public List<BotApiMethod<?>> apiMethodProcessor(String callbackQueryData, Message message) {
+        int messageId = message.getMessageId();
+        long chatId = message.getChatId();
+
         List<BotApiMethod<?>> actions = new ArrayList<>();
-        actions.add(generateMainMenu(message));
+        actions.add(generateMainMenu(messageId, chatId));
 
         return actions;
     }
@@ -28,9 +32,7 @@ public class CallbackMainMenuImpl implements Callback {
         return CallbackEnum.START_MENU;
     }
 
-    private EditMessageText generateMainMenu(Message message) {
-        Integer messageId = message.getMessageId();
-        Long chatId = message.getChatId();
+    private EditMessageText generateMainMenu(int messageId, long chatId) {
         String text = "Меню управления 'ПЧ Дельта'";
 
         return MessageBuilder.editMessageText(messageId, chatId, text, mainMenuKeyboard());
