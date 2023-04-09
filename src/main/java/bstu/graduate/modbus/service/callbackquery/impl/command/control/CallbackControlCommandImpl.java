@@ -1,4 +1,4 @@
-package bstu.graduate.modbus.service.callbackquery.impl;
+package bstu.graduate.modbus.service.callbackquery.impl.command.control;
 
 import bstu.graduate.modbus.common.enums.CallbackEnum;
 import bstu.graduate.modbus.service.callbackquery.Callback;
@@ -16,7 +16,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CallbackDeltaMenuImpl implements Callback {
+public class CallbackControlCommandImpl implements Callback {
+
     @Override
     public List<BotApiMethod<?>> apiMethodProcessor(Message message) {
         List<BotApiMethod<?>> actions = new ArrayList<>(1);
@@ -27,21 +28,21 @@ public class CallbackDeltaMenuImpl implements Callback {
 
     @Override
     public CallbackEnum getActionCallback() {
-        return CallbackEnum.DELTA_FC_CONTROL_MENU;
+        return CallbackEnum.CONTROL_COMMAND;
     }
 
     private EditMessageText generateMainMenu(Message message) {
         Integer messageId = message.getMessageId();
         Long chatId = message.getChatId();
-        String text = "Меню управления 'ПЧ Дельта'";
+        String text = "Команды управления";
 
         return MessageBuilder.editMessageText(messageId, chatId, text, deltaMenuKeyboard());
     }
 
     private InlineKeyboardMarkup deltaMenuKeyboard() {
-        int countButtons = 2;
-        String[] textButtons = {"Курсовая работа", "Дипломная работа"};
-        CallbackEnum[] callbacks = {CallbackEnum.COURSEWORK_MENU, CallbackEnum.GRADUATEWORK_MENU};
+        int countButtons = 3;
+        String[] textButtons = {"Запустить двигатель вперед", "Запустить двигатель назад", "Остановить двигатель"};
+        CallbackEnum[] callbacks = {CallbackEnum.RUN_FORWARD, CallbackEnum.RUN_REVERS, CallbackEnum.STOP};
 
         return GenerateInlineKeyboardMarkup.withoutRow(countButtons, textButtons, callbacks);
     }
