@@ -34,7 +34,7 @@ public class DeltaControl {
         PortHandler.writeBytes(CommandForDelta.STOP_AFTER_SIGNAL_LOSS);
         PortHandler.readBytes();
 
-        System.out.println("[DELTA]: Сигнал потерян! Двигатель остановлен!");
+        System.out.println("[DELTA]: Установлена обработка сбоя передачи сигнала!");
     }
 
     public void setRuntimeAfterSignalLoss(double second) {
