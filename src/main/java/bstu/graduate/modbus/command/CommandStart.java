@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 @Component
 @RequiredArgsConstructor
 public class CommandStart implements BaseCommand {
+
     @Override
     public BotCommand getBotCommand() {
         return BotCommand.builder()
@@ -21,11 +22,11 @@ public class CommandStart implements BaseCommand {
 
     @Override
     public BotApiMethod<?> getAction(Long chatId) {
+        String text = "Меню управления 'ПЧ Дельта'";
         int countButtons = 2;
-        String text = "Меню главного управления";
 
-        String[] textButtons = {"Управление реле", "Управление ПЧ 'Дельта'"};
-        CallbackEnum[] callbacks = {CallbackEnum.RELAY_CONTROL_MENU, CallbackEnum.DELTA_FC_CONTROL_MENU};
+        String[] textButtons = {"Команды управления", "Чтение статуса"};
+        CallbackEnum[] callbacks = {CallbackEnum.CONTROL_COMMAND, CallbackEnum.READING_STATUS_COMMAND};
 
         return MessageBuilder.sendMessage(chatId, text, GenerateInlineKeyboardMarkup.withoutRow(countButtons, textButtons, callbacks));
     }
