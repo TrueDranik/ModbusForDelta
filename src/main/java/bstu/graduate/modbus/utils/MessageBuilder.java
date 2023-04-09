@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 @UtilityClass
 public class MessageBuilder {
-    public static EditMessageText editMessageText(Integer messageId, Long chatId, String text, @Nullable InlineKeyboardMarkup replyMarkup) {
+    public static EditMessageText editMessageText(int messageId, long chatId, String text, @Nullable InlineKeyboardMarkup replyMarkup) {
         return EditMessageText.builder()
                 .messageId(messageId)
                 .chatId(chatId)
@@ -20,11 +20,11 @@ public class MessageBuilder {
                 .build();
     }
 
-    public static EditMessageText editMessageText(Integer messageId, Long chatId, String text) {
+    public static EditMessageText editMessageText(int messageId, long chatId, String text) {
         return editMessageText(messageId, chatId, text, null);
     }
 
-    public static SendMessage sendMessage(Long chatId, String text, @Nullable ReplyKeyboard replyMarkup) {
+    public static SendMessage sendMessage(long chatId, String text, @Nullable ReplyKeyboard replyMarkup) {
         return SendMessage.builder()
                 .chatId(chatId)
                 .text(text)
@@ -33,7 +33,7 @@ public class MessageBuilder {
                 .build();
     }
 
-    public static SendMessage sendMessage(Long chatId, String text){
+    public static SendMessage sendMessage(long chatId, String text){
         return sendMessage(chatId, text, null);
     }
 }

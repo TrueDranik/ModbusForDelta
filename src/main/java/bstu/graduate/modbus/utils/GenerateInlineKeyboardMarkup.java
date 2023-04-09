@@ -2,7 +2,6 @@ package bstu.graduate.modbus.utils;
 
 import bstu.graduate.modbus.common.enums.CallbackEnum;
 import lombok.experimental.UtilityClass;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -19,7 +18,7 @@ public class GenerateInlineKeyboardMarkup {
      * @param texts        (Массив текста для кнопок в порядке от первой к последней)
      * @param callbacks    (Массив коллбэков для кнопок в порядке от первой к последней)
      */
-    public static InlineKeyboardMarkup withoutRow(Integer countButtons, String[] texts, CallbackEnum[] callbacks) {
+    public static InlineKeyboardMarkup withoutRow(int countButtons, String[] texts, CallbackEnum[] callbacks) {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>(countButtons);
 
         for (int i = 0; i < countButtons; i++) {

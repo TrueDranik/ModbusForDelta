@@ -21,7 +21,7 @@ public class CommandStart implements BaseCommand {
     }
 
     @Override
-    public BotApiMethod<?> getAction(Long chatId) {
+    public BotApiMethod<?> getAction(long chatId) {
         String text = "Меню управления 'ПЧ Дельта'";
         int countButtons = 2;
 

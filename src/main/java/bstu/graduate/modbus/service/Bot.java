@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -44,7 +45,7 @@ public class Bot extends TelegramLongPollingBot {
             if (isCommand) {
                 processCommand(message);
             } else {
-                Long chatId = message.getChatId();
+                long chatId = message.getChatId();
                 sendMessage(chatId);
             }
         }
@@ -64,7 +65,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void processCommand(Message message) {
-        Long chatId = message.getChatId();
+        long chatId = message.getChatId();
         String messageText = message.getText();
 
         log.info("[COMMAND]: {}", messageText);
@@ -81,7 +82,7 @@ public class Bot extends TelegramLongPollingBot {
                 .orElseThrow(() -> new IllegalArgumentException("No such command!"));
     }
 
-    private void executeCommand(Long chatId, BaseCommand baseCommand) {
+    private void executeCommand(long chatId, BaseCommand baseCommand) {
         try {
             BotApiMethod<?> commandAction = baseCommand.getAction(chatId);
             execute(commandAction);
@@ -90,7 +91,7 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendMessage(Long chatId) {
+    private void sendMessage(long chatId) {
         try {
             SendMessage sendMessageMethod = new SendMessage(String.valueOf(chatId), "Неизвестное действие.");
             execute(sendMessageMethod);
@@ -102,7 +103,7 @@ public class Bot extends TelegramLongPollingBot {
     private void executeCallbackQueries(BotApiMethod<?> apiMethod) {
         try {
             execute(apiMethod);
-            Thread.sleep(2000);
+            TimeUnit.SECONDS.sleep(1L);
         } catch (TelegramApiException | InterruptedException e) {
             log.error("[CALLBACK]: error with execute: {}.", e.getMessage());
             Thread.currentThread().interrupt();

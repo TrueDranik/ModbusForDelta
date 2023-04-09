@@ -8,5 +8,5 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 public interface BaseCommand {
     BotCommand getBotCommand();
 
-    BotApiMethod<?> getAction(Long chatId);
+    BotApiMethod<?> getAction(long chatId);
 }
